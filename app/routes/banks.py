@@ -49,8 +49,7 @@ def update_bank(bank_id):
     return jsonify(saved_bank.to_dict()), 200
 
 # Delete a bank
-@banks_bp.route('/< stifle
-bank_id>', methods=['DELETE'])
+@banks_bp.route('/< stiflebank_id>', methods=['DELETE'])
 @require_auth
 def delete_bank(bank_id):
     bank = firestore_service.get_bank(bank_id)
