@@ -1,5 +1,13 @@
-from firebase_admin import firestore
+import os
+from firebase_admin import firestore, credentials, initialize_app
 from ..models.bank import Bank
+from config import get_config
+
+# Initialize Firebase with credentials
+config = get_config(os.getenv('FLASK_ENV', 'development'))
+print(config.FIREBASE_CREDENTIALS_PATH)
+cred = credentials.Certificate(config.FIREBASE_CREDENTIALS_PATH)
+initialize_app(cred, {'projectId': config.FIRESTORE_PROJECT_ID})
 
 # Firestore database service
 class FirestoreService:
