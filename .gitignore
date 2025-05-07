@@ -173,3 +173,4 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 secure/service-account.json
+firepit-log.txt
