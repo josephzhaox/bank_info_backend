@@ -5,13 +5,16 @@ from ..utils.middleware import require_auth
 from uuid import uuid4
 
 banks_bp = Blueprint('banks', __name__)
-firestore_service = FirestoreService(project_id='your-project-id')  # Replace with your project ID
+firestore_service = FirestoreService(project_id='bankinfoapp')  # Replace with your project ID
 
 # Create a bank
 @banks_bp.route('/', methods=['POST'])
 @require_auth
 def create_bank():
+    print("DEBUG: Entering create_bank route")
     data = request.get_json()
+    print(f"DEBUG: Request JSON: {data}")
+
     if not all(key in data for key in ['name', 'address', 'phone']):
         return jsonify({'error': 'Missing required fields'}), 400
     
@@ -29,9 +32,16 @@ def create_bank():
 @banks_bp.route('/', methods=['GET'])
 @require_auth
 def search_banks():
+    print(f"DEBUG: Entering search_banks, request: {request}")
+
     query = request.args.get('query', '')
-    banks = firestore_service.search_banks(query, request.user_id)
-    return jsonify([bank.to_dict() for bank in banks]), 200
+    print(f"DEBUG: Query parameter: {query}")
+    try:
+        banks = firestore_service.search_banks(query, request.user_id)
+        return jsonify([bank.to_dict() for bank in banks]), 200
+    except Exception as e:
+        print(f"DEBUG: Error in search_banks: {str(e)}")
+        return jsonify({'error': f"Search failed: {str(e)}"}), 500
 
 # Update a bank
 @banks_bp.route('/<bank_id>', methods=['PUT'])

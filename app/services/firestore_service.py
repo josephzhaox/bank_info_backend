@@ -31,10 +31,7 @@ class FirestoreService:
     
     # Search banks by name (partial match) for a user
     def search_banks(self, query, user_id):
-        query_ref = (self.db.collection('banks')
-                     .where('user_id', '==', user_id)
-                     .where('name', '>=', query)
-                     .where('name', '<=', query + '\uf8ff'))
+        query_ref = (self.db.collection('banks').where('name', '==', query))
         docs = query_ref.get()
         return [Bank.from_dict(doc.to_dict()) for doc in docs]
     
