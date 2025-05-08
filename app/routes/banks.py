@@ -25,17 +25,22 @@ def create_bank():
         phone=data['phone'],
         user_id=request.user_id
     )
-    saved_bank = firestore_service.save_bank(bank)
-    return jsonify(saved_bank.to_dict()), 201
+
+    try:
+        saved_bank = firestore_service.save_bank(bank)
+        return jsonify(saved_bank.to_dict()), 201
+    except Exception as e:
+        print(f"DEBUG: Error in create_banks: {str(e)}")
+        return jsonify({'error': f"Create failed: {str(e)}"}), 500
 
 # Read banks (search by name)
 @banks_bp.route('/', methods=['GET'])
 @require_auth
 def search_banks():
-    print(f"DEBUG: Entering search_banks, request: {request}")
-
+    ## print(f"DEBUG: Entering search_banks, request: {request}")
     query = request.args.get('query', '')
-    print(f"DEBUG: Query parameter: {query}")
+    ## print(f"DEBUG: Query parameter: {query}")
+
     try:
         banks = firestore_service.search_banks(query, request.user_id)
         return jsonify([bank.to_dict() for bank in banks]), 200
