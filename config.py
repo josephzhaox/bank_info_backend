@@ -8,7 +8,7 @@ class Config:
     """Base configuration class."""
     # Flask settings
     SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key')  # Fallback for development
-    DEBUG = True  # Default to False for production safety
+    DEBUG = False  # Default to False for production safety
     
     # Firebase settings
     FIREBASE_CREDENTIALS_PATH = os.getenv('FIREBASE_CREDENTIALS_PATH')
@@ -32,7 +32,7 @@ class ProductionConfig(Config):
     DEBUG = False
     
     # For production, override FIREBASE_CREDENTIALS_PATH with Secret Manager (optional)
-    FIREBASE_CREDENTIALS_PATH = os.getenv('FIREBASE_CREDENTIALS_PATH', './google-services.json')
+    FIREBASE_CREDENTIALS_PATH = os.getenv('FIREBASE_CREDENTIALS_PATH', '/secrets/firebase-service-account.json')
 
 # Map environments to configurations
 config_by_name = {
